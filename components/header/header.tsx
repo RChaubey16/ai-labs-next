@@ -1,10 +1,15 @@
+'use client';
+
 import { useState } from "react"
 
 import Link from "next/link"
 import { LogIn, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useTheme } from 'next-themes';
+import { Sun, Moon } from 'lucide-react';
 
 export default function Header()  {
+    const { theme, setTheme } = useTheme();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -55,7 +60,9 @@ export default function Header()  {
                 </linearGradient>
               </defs>
             </svg>
-            <span className="text-xl font-bold">QED42 AI Labs</span>
+            <Link href="/" className="text-xl font-bold">
+              QED42 AI Labs
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
@@ -73,13 +80,39 @@ export default function Header()  {
               Contact
             </Link>
           </nav>
-
-          {/* Desktop Sign In Button */}
-          <Button asChild size="sm" className="hidden md:flex bg-qed-red hover:bg-qed-red/90">
-            <Link href="#sign-in">
-              <LogIn className="mr-2 h-4 w-4" /> Sign In
-            </Link>
+ 
+          <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className="p-0 focus:ring-0 shadow-none"
+          >
+            {theme === 'dark' ? (
+              <Sun className="h-24 w-24 text-white" />
+            ) : (
+              <Moon className="h-24 w-24 text-gray-600" />
+            )}
+            <span className="sr-only">Toggle theme</span>
           </Button>
+
+          <Button
+          variant="outline"
+          size="sm"
+          asChild
+          className="
+            border-black bg-black text-white hover:bg-gray-800 hover:text-white  hover:border-gray-700 
+            dark:border-gray-300 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:hover:border-gray-600
+          "
+        >
+            <Link href="#sign-in" className="flex items-center">
+              <LogIn className="mr-2 h-4 w-4" /> <span>Sign In</span>
+            </Link>
+        </Button>
+
+
+          </div>
+
 
           {/* Mobile Menu Button */}
           <button

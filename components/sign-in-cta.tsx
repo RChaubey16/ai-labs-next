@@ -84,16 +84,16 @@ export default function SignInCTA() {
   return (
     <div className="flex flex-col md:flex-row gap-8 items-start">
       <div className="flex-1 space-y-4">
-        <h2 className="text-2xl font-bold">Why Sign In?</h2>
-        <p className="text-qed-gray">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Why Sign In?</h2>
+        <p className="text-gray-600 dark:text-gray-300">
           The AI applications on this site are connected to APIs that are costly to run. To ensure fair usage and
           maintain service quality, we require users to create an account.
         </p>
-        <div className="bg-white p-4 rounded-lg border border-qed-gray/20 flex items-start gap-3">
-          <InfoIcon className="h-5 w-5 text-qed-red mt-0.5 flex-shrink-0" />
+        <div className="bg-white p-4 rounded-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-600 dark:text-white flex items-start gap-3">
+          <InfoIcon className="h-5 w-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
           <div>
-            <h3 className="font-medium">Free Account Benefits:</h3>
-            <ul className="list-disc list-inside text-qed-gray mt-2 space-y-1">
+            <h3 className="font-medium text-gray-900 dark:text-white">Free Account Benefits:</h3>
+            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 mt-2 space-y-1">
               <li>Access to all AI demos and experiments</li>
               <li>50 requests per day (resets daily)</li>
               <li>Contact us to request increased limits</li>
@@ -103,16 +103,22 @@ export default function SignInCTA() {
       </div>
 
       <div className="flex-1 w-full md:max-w-md">
-        <Card>
+        <Card className="bg-white dark:bg-gray-800 border dark:border-gray-600">
           <CardHeader>
-            <CardTitle>Account Access</CardTitle>
-            <CardDescription>Sign in to your account or create a new one to access our AI demos.</CardDescription>
+            <CardTitle className="text-gray-900 dark:text-white">Account Access</CardTitle>
+            <CardDescription className="text-gray-600 dark:text-gray-300">
+              Sign in to your account or create a new one to access our AI demos.
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="signin" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="signin">Sign In</TabsTrigger>
-                <TabsTrigger value="signup">Create Account</TabsTrigger>
+                <TabsTrigger value="signin" className="text-gray-900 dark:text-white dark:hover:text-gray-400 hover:text-gray-600">
+                  Sign In
+                </TabsTrigger>
+                <TabsTrigger value="signup" className="text-gray-900 dark:text-white dark:hover:text-gray-400 hover:text-gray-600">
+                  Create Account
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="signin">
@@ -123,15 +129,15 @@ export default function SignInCTA() {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Email</FormLabel>
+                          <FormLabel className="text-gray-900 dark:text-white">Email</FormLabel>
                           <FormControl>
                             <Input
                               placeholder="your.email@example.com"
                               {...field}
-                              className="border-qed-gray/30 focus-visible:ring-qed-red"
+                              className="border-gray-300 focus-visible:ring-red-600 dark:bg-gray-700 dark:text-white dark:border-gray-600"
                             />
                           </FormControl>
-                          <FormMessage className="text-qed-red" />
+                          <FormMessage className="text-red-600 dark:text-red-400" />
                         </FormItem>
                       )}
                     />
@@ -140,19 +146,19 @@ export default function SignInCTA() {
                       name="password"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Password</FormLabel>
+                          <FormLabel className="text-gray-900 dark:text-white">Password</FormLabel>
                           <FormControl>
                             <Input
                               type="password"
                               {...field}
-                              className="border-qed-gray/30 focus-visible:ring-qed-red"
+                              className="border-gray-300 focus-visible:ring-red-600 dark:bg-gray-700 dark:text-white dark:border-gray-600"
                             />
                           </FormControl>
-                          <FormMessage className="text-qed-red" />
+                          <FormMessage className="text-red-600 dark:text-red-400" />
                         </FormItem>
                       )}
                     />
-                    <Button type="submit" className="w-full bg-qed-red hover:bg-qed-red/90" disabled={isSubmitting}>
+                    <Button type="submit" className="w-full bg-red-600 text-white hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700" disabled={isSubmitting}>
                       {isSubmitting ? "Signing in..." : "Sign In"}
                     </Button>
                   </form>
@@ -167,15 +173,15 @@ export default function SignInCTA() {
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Name</FormLabel>
+                          <FormLabel className="text-gray-900 dark:text-white">Name</FormLabel>
                           <FormControl>
                             <Input
                               placeholder="Your name"
                               {...field}
-                              className="border-qed-gray/30 focus-visible:ring-qed-red"
+                              className="border-gray-300 focus-visible:ring-red-600 dark:bg-gray-700 dark:text-white dark:border-gray-600"
                             />
                           </FormControl>
-                          <FormMessage className="text-qed-red" />
+                          <FormMessage className="text-red-600 dark:text-red-400" />
                         </FormItem>
                       )}
                     />
@@ -184,15 +190,15 @@ export default function SignInCTA() {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Email</FormLabel>
+                          <FormLabel className="text-gray-900 dark:text-white">Email</FormLabel>
                           <FormControl>
                             <Input
                               placeholder="your.email@example.com"
                               {...field}
-                              className="border-qed-gray/30 focus-visible:ring-qed-red"
+                              className="border-gray-300 focus-visible:ring-red-600 dark:bg-gray-700 dark:text-white dark:border-gray-600"
                             />
                           </FormControl>
-                          <FormMessage className="text-qed-red" />
+                          <FormMessage className="text-red-600 dark:text-red-400" />
                         </FormItem>
                       )}
                     />
@@ -201,19 +207,19 @@ export default function SignInCTA() {
                       name="password"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Password</FormLabel>
+                          <FormLabel className="text-gray-900 dark:text-white">Password</FormLabel>
                           <FormControl>
                             <Input
                               type="password"
                               {...field}
-                              className="border-qed-gray/30 focus-visible:ring-qed-red"
+                              className="border-gray-300 focus-visible:ring-red-600 dark:bg-gray-700 dark:text-white dark:border-gray-600"
                             />
                           </FormControl>
-                          <FormMessage className="text-qed-red" />
+                          <FormMessage className="text-red-600 dark:text-red-400" />
                         </FormItem>
                       )}
                     />
-                    <Button type="submit" className="w-full bg-qed-red hover:bg-qed-red/90" disabled={isSubmitting}>
+                    <Button type="submit" className="w-full bg-red-600 text-white hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700" disabled={isSubmitting}>
                       {isSubmitting ? "Creating account..." : "Create Free Account"}
                     </Button>
                   </form>
@@ -226,4 +232,3 @@ export default function SignInCTA() {
     </div>
   )
 }
-
