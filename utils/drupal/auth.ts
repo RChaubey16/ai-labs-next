@@ -1,5 +1,4 @@
 import { drupalAuthClient } from 'drupal-auth-client'
-import { CloudCog } from 'lucide-react'
 
 interface TokenArgs {
   uri: string
@@ -8,7 +7,6 @@ interface TokenArgs {
 }
 
 export const getToken = async ({ uri, clientId, clientSecret }: TokenArgs) => {
-  console.log("IDDDDD", uri)
   const client = await drupalAuthClient(uri, 'client_credentials', {
     clientId,
     clientSecret,
