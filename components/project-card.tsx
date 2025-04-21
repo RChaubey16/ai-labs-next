@@ -1,22 +1,31 @@
-import { ArrowUpRight } from "lucide-react"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { ArrowUpRight } from 'lucide-react'
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 interface ProjectCardProps {
   title: string
-  description: string
-  image: string
-  tags: string[]
+  description: {
+    value: string
+    processed: string
+  }
+  tags: { id: string; name: string }[]
   demoUrl: string
+  path: string
 }
 
-export default function ProjectCard({ title, description, image, tags, demoUrl }: ProjectCardProps) {
+export default function ProjectCard({
+  title,
+  description,
+  tags,
+  demoUrl,
+  path,
+}: ProjectCardProps) {
   return (
-    <Card className="overflow-hidden transition-all hover:shadow-lg border-none">
+    <Card className="overflow-hidden border-none transition-all hover:shadow-lg">
       <div className="aspect-video overflow-hidden">
         <img
-          src={image || "/placeholder.svg"}
+          src={'/placeholder.svg'}
           alt={title}
           className="h-full w-full object-cover transition-transform hover:scale-105"
         />
@@ -25,18 +34,30 @@ export default function ProjectCard({ title, description, image, tags, demoUrl }
         <h3 className="text-xl font-bold">{title}</h3>
       </CardHeader>
       <CardContent>
-        <p className="text-qed-gray">{description}</p>
-        <div className="flex flex-wrap gap-2 mt-4">
-          {tags.map((tag, index) => (
-            <Badge key={index} variant="secondary" className="bg-qed-lightgray text-qed-gray hover:bg-qed-lightgray/80">
-              {tag}
+        <div
+          className="text-qed-gray"
+          dangerouslySetInnerHTML={{ __html: description.value }}
+        />
+
+        <div className="mt-4 flex flex-wrap gap-2">
+          {tags.map((tag: { id: string; name: string }) => (
+            <Badge
+              key={tag.id}
+              variant="secondary"
+              className="bg-qed-lightgray text-qed-gray hover:bg-qed-lightgray/80"
+            >
+              {tag.name}
             </Badge>
           ))}
         </div>
       </CardContent>
       <CardFooter>
-        <Button variant="outline" asChild className="w-full border-qed-red text-qed-red hover:bg-qed-red/10">
-          <a href={demoUrl} target="_blank" rel="noopener noreferrer">
+        <Button
+          variant="outline"
+          asChild
+          className="border-qed-red text-qed-red hover:bg-qed-red/10 w-full"
+        >
+          <a href={path} target="_blank" rel="noopener noreferrer">
             View Demo <ArrowUpRight className="ml-2 h-4 w-4" />
           </a>
         </Button>
@@ -44,4 +65,3 @@ export default function ProjectCard({ title, description, image, tags, demoUrl }
     </Card>
   )
 }
-
