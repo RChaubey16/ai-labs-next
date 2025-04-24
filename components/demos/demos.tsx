@@ -2,15 +2,26 @@
 import { useFetchDemos } from '@/hooks/useFetchDemos'
 import ProjectCard from '@/components/project-card'
 
-export default function Demos() {
-  const { demos, loading, error } = useFetchDemos()
+type Demo = {
+  id: string
+  title: string
+  description: { value: string }
+  technologies: { id: string; name: string }[]
+  demoUrl: string
+  path: string
+}
 
-  if (loading) {
-    return <div>Loading...</div>
-  }
+export default async function Demos() {
+  const demos = await useFetchDemos()
 
-  if (error) {
-    return <div>Error: {error}</div>
+  if (!demos || demos.length === 0) {
+    return (
+      <section className="demos-section mt-8 p-8 text-center">
+        <p className="text-lg text-gray-500">
+          No demos available at the moment.
+        </p>
+      </section>
+    )
   }
 
   return (
@@ -29,11 +40,11 @@ export default function Demos() {
           </div>
         </div>
         <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {demos.map((demo) => (
+          {demos.map((demo: Demo) => (
             <ProjectCard
-              key={demo.id} 
+              key={demo.id}
               title={demo.title}
-              description={demo.description}
+              description={demo.description.value}
               tags={demo.technologies}
               demoUrl={demo.demoUrl}
               path={demo.path}

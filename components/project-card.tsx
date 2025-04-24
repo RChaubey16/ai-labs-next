@@ -5,10 +5,7 @@ import { Button } from '@/components/ui/button'
 
 interface ProjectCardProps {
   title: string
-  description: {
-    value: string
-    processed: string
-  }
+  description: string
   tags: { id: string; name: string }[]
   demoUrl: string
   path: string
@@ -36,11 +33,11 @@ export default function ProjectCard({
       <CardContent>
         <div
           className="text-qed-gray"
-          dangerouslySetInnerHTML={{ __html: description.value }}
+          dangerouslySetInnerHTML={{ __html: description }}
         />
 
         <div className="mt-4 flex flex-wrap gap-2">
-          {tags.map((tag: { id: string; name: string }) => (
+          {tags.map((tag) => (
             <Badge
               key={tag.id}
               variant="secondary"
