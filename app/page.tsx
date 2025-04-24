@@ -1,5 +1,5 @@
-'use client'
-
+// app/page.tsx
+export const revalidate = 60
 import SignInCTA from '@/components/sign-in-cta'
 import Header from '@/components/header/header'
 import Footer from '@/components/footer/footer'
