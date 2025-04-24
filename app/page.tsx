@@ -15,7 +15,7 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <Hero />
-        <section id="sign-in" className="bg-qed-lightgray py-12 md:py-16">
+        <section id="sign-in" className=" py-12 md:py-16">
           <div className="container px-4 md:px-6">
             <SignInCTA />
           </div>
