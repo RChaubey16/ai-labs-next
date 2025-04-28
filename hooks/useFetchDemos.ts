@@ -1,8 +1,36 @@
-// hooks/useFetchDemos.ts
 import { gql } from '@urql/core'
 import { getClient } from '@/utils/drupal/client'
 
-export const useFetchDemos = async () => {
+interface PaginationParams {
+  first?: number
+  after?: string | null
+  before?: string | null
+  last?: number
+}
+
+interface Demo {
+  id: string
+  title: string
+  description: { value: string }
+  technologies: { id: string; name: string; path: string }[]
+  path: string
+}
+
+interface PageInfo {
+  hasNextPage: boolean
+  hasPreviousPage: boolean
+  startCursor: string | null
+  endCursor: string | null
+}
+
+interface FetchDemosResult {
+  nodes: Demo[]
+  pageInfo: PageInfo
+}
+
+export const fetchDemos = async (
+  paginationParams: PaginationParams = { first: 10 }
+): Promise<FetchDemosResult> => {
   try {
     const client = await getClient({
       url: process.env.NEXT_PUBLIC_DRUPAL_GRAPHQL_URI!,
@@ -13,9 +41,24 @@ export const useFetchDemos = async () => {
       },
     })
 
+    const variables: Record<string, any> = {}
+    if (paginationParams.first !== undefined)
+      variables.first = paginationParams.first
+    if (paginationParams.after) variables.after = paginationParams.after
+    if (paginationParams.before) variables.before = paginationParams.before
+    if (paginationParams.last !== undefined)
+      variables.last = paginationParams.last
+
+    console.log('GraphQL Variables:', variables)
+
     const MY_QUERY = gql`
-      query MyQuery {
-        nodeAiDemos(first: 10) {
+      query MyQuery($first: Int, $after: Cursor, $before: Cursor, $last: Int) {
+        nodeAiDemos(
+          first: $first
+          after: $after
+          before: $before
+          last: $last
+        ) {
           nodes {
             id
             technologies {
@@ -31,13 +74,37 @@ export const useFetchDemos = async () => {
               value
             }
           }
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
+          }
         }
       }
     `
-    const result = await client.query(MY_QUERY, {}).toPromise()
-    return result.data.nodeAiDemos.nodes
+
+    const result = await client.query(MY_QUERY, variables).toPromise()
+
+    if (!result.data) {
+      console.error('GraphQL response error:', result.error)
+      throw new Error(result.error?.message || 'GraphQL query failed')
+    }
+
+    return {
+      nodes: result.data.nodeAiDemos.nodes,
+      pageInfo: result.data.nodeAiDemos.pageInfo,
+    }
   } catch (err) {
     console.error('fetchDemos failed:', err)
-    return []
+    return {
+      nodes: [],
+      pageInfo: {
+        hasNextPage: false,
+        hasPreviousPage: false,
+        startCursor: null,
+        endCursor: null,
+      },
+    }
   }
 }
