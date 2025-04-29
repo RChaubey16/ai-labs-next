@@ -1,19 +1,12 @@
 import { gql } from '@urql/core'
 import { getClient } from '@/utils/drupal/client'
+import { Demo } from '@/components/demos/demos'
 
 interface PaginationParams {
   first?: number
   after?: string | null
   before?: string | null
   last?: number
-}
-
-interface Demo {
-  id: string
-  title: string
-  description: { value: string }
-  technologies: { id: string; name: string; path: string }[]
-  path: string
 }
 
 interface PageInfo {
@@ -73,6 +66,9 @@ export const fetchDemos = async (
             description {
               value
             }
+            youtubeUrl {
+              url
+            }
           }
           pageInfo {
             hasNextPage
@@ -90,6 +86,7 @@ export const fetchDemos = async (
       console.error('GraphQL response error:', result.error)
       throw new Error(result.error?.message || 'GraphQL query failed')
     }
+    console.log(result.data.nodeAiDemos.nodes)
 
     return {
       nodes: result.data.nodeAiDemos.nodes,

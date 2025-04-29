@@ -2,16 +2,9 @@ import { fetchDemos } from '@/hooks/useFetchDemos';
 import ProjectCard from '@/components/project-card';
 import Pagination from '@/components/pagination/pagination';
 import { notFound } from 'next/navigation';
+import { Demo } from '@/components/demos/demos';
 
 const ITEMS_PER_PAGE = 6;
-
-type Demo = {
-  id: string;
-  title: string;
-  description: { value: string };
-  technologies: { id: string; name: string; path: string }[];
-  path: string;
-};
 
 type PageProps = {
   params: { page: string };
@@ -84,7 +77,7 @@ export default async function DemosPage({ params }: PageProps) {
                 title={demo.title}
                 description={demo.description.value}
                 tags={demo.technologies}
-                demoUrl={demo.path}
+                youtubeUrl={demo.youtubeUrl?.url || ''}
                 path={demo.path}
               />
             ))}

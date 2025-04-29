@@ -1,18 +1,18 @@
-// components/demos/demos.tsx
-import { useFetchDemos } from '@/hooks/useFetchDemos'
+import { fetchDemos } from '@/hooks/useFetchDemos'
 import ProjectCard from '@/components/project-card'
 
-type Demo = {
+export type Demo = {
   id: string
   title: string
   description: { value: string }
-  technologies: { id: string; name: string }[]
-  demoUrl: string
+  technologies: { id: string; name: string; path: string }[]
   path: string
+  youtubeUrl: { url: string }
 }
 
 export default async function Demos() {
-  const demos = await useFetchDemos()
+  const { nodes: demos } = await fetchDemos({ first: 6 })
+  console.log('Demos:', demos)
 
   if (!demos || demos.length === 0) {
     return (
@@ -46,7 +46,7 @@ export default async function Demos() {
               title={demo.title}
               description={demo.description.value}
               tags={demo.technologies}
-              demoUrl={demo.demoUrl}
+              youtubeUrl={demo.youtubeUrl?.url || ''}
               path={demo.path}
             />
           ))}
@@ -55,3 +55,5 @@ export default async function Demos() {
     </section>
   )
 }
+
+// export const revalidate = 3600; // Revalidate every 1 hour (ISR)

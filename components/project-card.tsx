@@ -7,7 +7,7 @@ interface ProjectCardProps {
   title: string
   description: string
   tags: { id: string; name: string }[]
-  demoUrl: string
+  youtubeUrl: string
   path: string
 }
 
@@ -15,9 +15,11 @@ export default function ProjectCard({
   title,
   description,
   tags,
-  demoUrl,
+  youtubeUrl,
   path,
 }: ProjectCardProps) {
+  console.log("🚀 ~ demoUrl:", youtubeUrl)
+  
   return (
     <Card className="overflow-hidden border-none transition-all hover:shadow-lg">
       <div className="aspect-video overflow-hidden">
