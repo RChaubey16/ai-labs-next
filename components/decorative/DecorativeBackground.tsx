@@ -35,7 +35,7 @@ export default function DecorativeBackground({
       case 'contact':
         return [
           {
-            top: '2.5rem',
+            top: '5rem',
             left: '2.5rem',
             width: '10rem',
             height: '10rem',
@@ -88,21 +88,7 @@ export default function DecorativeBackground({
           },
         ]
 
-      case 'demos':
-        return [
-          {
-            top: '18%',
-            left: '90%',
-            width: '8rem',
-            height: '8rem',
-          },
-          {
-            top: '85%',
-            left: '5%',
-            width: '7rem',
-            height: '7rem',
-          },
-        ]
+      
       case 'capabilities':
         return [
           {
@@ -112,7 +98,7 @@ export default function DecorativeBackground({
             height: '8rem',
           },
           {
-            top: '85%',
+            top: '75%',
             left: '5%',
             width: '7rem',
             height: '7rem',

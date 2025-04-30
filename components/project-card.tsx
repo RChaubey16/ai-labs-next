@@ -1,16 +1,9 @@
 import Link from 'next/link'
-
 import { ArrowUpRight } from 'lucide-react'
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from '@/components/ui/card'
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-
 interface ProjectCardProps {
   id: string
   title: string
@@ -18,8 +11,14 @@ interface ProjectCardProps {
   tags: { id: string; name: string }[]
   youtubeUrl: string
   path: string
-  view?: 'grid' | 'list'
 }
+
+const getYouTubeThumbnail = (url: string) => {
+  const regExp =
+    /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|embed)\/|.*[?&]v=)|youtu\.be\/)([^"&?/ ]{11})/;
+  const match = url.match(regExp);
+  return match ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : '/placeholder.svg';
+};
 
 export default function ProjectCard({
   id,
@@ -28,79 +27,70 @@ export default function ProjectCard({
   tags,
   youtubeUrl,
   path,
-  view = 'grid',
 }: ProjectCardProps) {
   const truncateDescription = (text: string, maxLength: number) =>
-    text.length > maxLength
-      ? text.substring(0, maxLength).trim() + '...'
-      : text
-
+    text.length > maxLength ? text.substring(0, maxLength).trim() + '...' : text
   return (
     <Card
       className={cn(
-        'overflow-hidden transition-all hover:shadow-lg dark:hover:shadow-lg dark:border-gray-600 dark:bg-gray-800 bg-white',
-        view === 'grid'
-          ? 'flex flex-col justify-between h-full border-none'
-          : 'flex md:flex-row flex-col items-start gap-4 p-4 min-h-[275px]' 
+        'overflow-hidden bg-gray-100 transition-all dark:border-gray-600 dark:bg-gray-900/80',
+        'flex h-full flex-col justify-between border-none hover:shadow-lg'
       )}
     >
       {/* Thumbnail */}
-      <div
-        className={cn(
-          view === 'grid'
-            ? 'aspect-video w-full overflow-hidden'
-            : 'w-full md:w-1/2 h-60 overflow-hidden flex-shrink-0 rounded-lg'
-        )}
-      >
+      <div className={cn('overflow-hidden', 'aspect-video max-h-48 w-full')}>
         <img
-          src="/placeholder.svg"
+          src={getYouTubeThumbnail(youtubeUrl)}
           alt={title}
-          className="h-full w-full object-cover transition-transform hover:scale-105"
+          className="h-full w-full object-cover"
         />
       </div>
-
       {/* Text Content */}
-      <div
-        className={cn(
-          view === 'grid'
-            ? 'flex flex-col flex-1'
-            : 'flex flex-col justify-between w-full'
-        )}
-      >
-        <CardHeader className={cn('pb-2', view === 'list' && 'p-0')}>
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+      <div className={cn('flex flex-col', 'flex-1')}>
+        <CardHeader className={cn('pb-2', 'pt-4')}>
+          <h3
+            className={cn('font-bold text-gray-900 dark:text-white', 'text-lg')}
+          >
             {title}
           </h3>
         </CardHeader>
-
-        <CardContent className={cn('flex-1 flex flex-col justify-between', view === 'list' && 'p-0')}>
-          <p className="text-sm text-gray-700 dark:text-gray-300 leading-snug">
-            {truncateDescription(description.replace(/<[^>]*>?/gm, ''), view === 'grid' ? 130 : 80)}
+        <CardContent className={cn('flex flex-1 flex-col justify-between')}>
+          <p className="text-sm leading-snug text-gray-700 dark:text-gray-300">
+            {truncateDescription(description.replace(/<[^>]*>?/gm, ''), 100)}
           </p>
-
-          <div className="mt-6 flex flex-wrap gap-2">
-            {tags.map((tag) => (
+          <div className={cn('flex flex-wrap gap-2', 'mt-3')}>
+            {tags.slice(0, 3).map((tag) => (
               <Badge
                 key={tag.id}
                 variant="secondary"
-                className="bg-[#f1f5f9] text-gray-700 dark:bg-[#2b3c4c] dark:text-gray-300"
+                className="bg-gray-200 text-xs text-gray-700 dark:bg-gray-700 dark:text-gray-300"
               >
                 {tag.name}
               </Badge>
             ))}
+            {tags.length > 3 && (
+              <Badge variant="outline" className="text-xs">
+                +{tags.length - 3}
+              </Badge>
+            )}
           </div>
         </CardContent>
-
-        <CardFooter className={cn('pt-4', view === 'list' && 'p-0 mt-6')}>
-        <Button
-          variant="outline"
-          asChild
-          className="border-qed-red text-qed-red hover:bg-qed-red/10 w-full"
-        >
-          <Link href={`/node/${id}`}>
-            View Demo <ArrowUpRight className="ml-2 h-4 w-4" />
-          </Link>
-        </Button>
+        <CardFooter className={cn('pt-2', 'pb-4')}>
+          <Button
+            asChild
+            size="sm"
+            className={cn(
+              ' bg-transparent transition-colors bg-gray-700 text-white dark:bg-gray-600 dark:text-white dark:hover:bg-white dark:hover:text-black',
+              'w-full py-1 text-xs'
+            )}
+          >
+            <Link
+              href={`/node/${id}`}
+              className="flex items-center justify-center"
+            >
+              View Demo <ArrowUpRight className="ml-1 h-3 w-3" />
+            </Link>
+          </Button>
         </CardFooter>
       </div>
     </Card>

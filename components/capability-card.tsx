@@ -14,8 +14,8 @@ export default function CapabilityCard({ title, description, icon }: CapabilityC
       <div>{icon}</div>
       <h3 className="text-xl font-bold text-gray-900 dark:text-white">{title}</h3>
     </CardHeader>
-    <CardContent>
-      <p className="text-gray-600 dark:text-gray-300">{description}</p>
+    <CardContent >
+      <p className="text-gray-600 dark:text-gray-300 hidden lg:block">{description}</p>
     </CardContent>
   </Card>
   
