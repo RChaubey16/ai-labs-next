@@ -1,5 +1,6 @@
 import { fetchDemos } from '@/hooks/FetchDemos'
 import ProjectCard from '@/components/project-card'
+import DecorativeBackground from '../decorative/DecorativeBackground'
 
 export type Demo = {
   id: string
@@ -25,7 +26,8 @@ export default async function Demos() {
   }
 
   return (
-    <section id="demos" className="py-16 md:py-24">
+    <section id="demos" className="relative overflow-hidden py-16 md:py-24">
+      <DecorativeBackground variant="demos" />
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-start justify-start space-y-4 text-left">
           <div className="space-y-2">
@@ -50,7 +52,7 @@ export default async function Demos() {
               youtubeUrl={demo.youtubeUrl?.url || ''}
               path={demo.path}
             />
-          ))}
+          ))} 
         </div>
       </div>
     </section>

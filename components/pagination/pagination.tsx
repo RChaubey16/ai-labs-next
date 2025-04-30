@@ -31,7 +31,7 @@ export default function Pagination({
           Previous
         </Button>
       )}
-      <span className="text-sm text-gray-700">
+      <span className="text-sm text-gray-700 dark:text-white">
         Page {currentPage} of {totalPages}
       </span>
       {nextLink ? (

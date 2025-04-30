@@ -1,10 +1,9 @@
 import { fetchDemos } from '@/hooks/FetchDemos'
-import ProjectCard from '@/components/project-card'
 import Pagination from '@/components/pagination/pagination'
 import { notFound } from 'next/navigation'
 import { Demo } from '@/components/demos/demos'
+import DemoGallery from '@/components/demo-gallery/demo-gallery'
 import { REVALIDATE_TIME } from '@/constants'
-
 const ITEMS_PER_PAGE = 6
 
 type PageProps = {
@@ -60,45 +59,25 @@ export default async function DemosPage({ params }: PageProps) {
 
   return (
     <section className="py-16 md:py-24">
-      <div className="container px-4 md:px-6">
-        <div className="mb-8">
-          <h1 className="mb-2 text-4xl font-bold">All AI Demos</h1>
-          <p className="text-gray-600">
-            Explore our collection of AI experiments
-          </p>
-        </div>
+      <DemoGallery
+        demos={demos}
+        page={page}
+        totalPages={totalPages}
+        hasPreviousPage={hasPreviousPage}
+        hasNextPage={hasNextPage}
+        
+      />
 
-        {demos.length === 0 ? (
-          <div className="flex h-64 items-center justify-center">
-            <p>No demos available.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {demos.map((demo) => (
-              <ProjectCard
-                id={demo.id}
-                key={demo.id}
-                title={demo.title}
-                description={demo.description.value}
-                tags={demo.technologies}
-                youtubeUrl={demo.youtubeUrl?.url || ''}
-                path={demo.path}
-              />
-            ))}
-          </div>
-        )}
-
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          prevLink={hasPreviousPage ? `/demos/${page - 1}` : null}
-          nextLink={hasNextPage ? `/demos/${page + 1}` : null}
-          hasPreviousPage={hasPreviousPage}
-          hasNextPage={hasNextPage}
-        />
-      </div>
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        prevLink={hasPreviousPage ? `/demos/${page - 1}` : null}
+        nextLink={hasNextPage ? `/demos/${page + 1}` : null}
+        hasPreviousPage={hasPreviousPage}
+        hasNextPage={hasNextPage}
+      />
     </section>
   )
 }
 
-export const revalidate = REVALIDATE_TIME 
+export const revalidate = REVALIDATE_TIME
