@@ -1,4 +1,4 @@
-import { fetchDemos } from '@/hooks/useFetchDemos'
+import { fetchDemos } from '@/hooks/FetchDemos'
 import ProjectCard from '@/components/project-card'
 
 export type Demo = {
@@ -43,6 +43,7 @@ export default async function Demos() {
           {demos.map((demo: Demo) => (
             <ProjectCard
               key={demo.id}
+              id={demo.id}
               title={demo.title}
               description={demo.description.value}
               tags={demo.technologies}
@@ -55,5 +56,3 @@ export default async function Demos() {
     </section>
   )
 }
-
-// export const revalidate = 3600; // Revalidate every 1 hour (ISR)

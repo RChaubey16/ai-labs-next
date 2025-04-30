@@ -21,6 +21,37 @@ interface FetchDemosResult {
   pageInfo: PageInfo
 }
 
+const MY_QUERY = gql`
+  query MyQuery($first: Int, $after: Cursor, $before: Cursor, $last: Int) {
+    nodeAiDemos(first: $first, after: $after, before: $before, last: $last) {
+      nodes {
+        id
+        technologies {
+          ... on TermTags {
+            id
+            name
+            path
+          }
+        }
+        path
+        title
+        description {
+          value
+        }
+        youtubeUrl {
+          url
+        }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+    }
+  }
+`
+
 export const fetchDemos = async (
   paginationParams: PaginationParams = { first: 10 }
 ): Promise<FetchDemosResult> => {
@@ -44,49 +75,13 @@ export const fetchDemos = async (
 
     console.log('GraphQL Variables:', variables)
 
-    const MY_QUERY = gql`
-      query MyQuery($first: Int, $after: Cursor, $before: Cursor, $last: Int) {
-        nodeAiDemos(
-          first: $first
-          after: $after
-          before: $before
-          last: $last
-        ) {
-          nodes {
-            id
-            technologies {
-              ... on TermTags {
-                id
-                name
-                path
-              }
-            }
-            path
-            title
-            description {
-              value
-            }
-            youtubeUrl {
-              url
-            }
-          }
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-        }
-      }
-    `
-
     const result = await client.query(MY_QUERY, variables).toPromise()
 
     if (!result.data) {
       console.error('GraphQL response error:', result.error)
       throw new Error(result.error?.message || 'GraphQL query failed')
     }
-    console.log(result.data.nodeAiDemos.nodes)
+    // console.log(result.data.nodeAiDemos.nodes)
 
     return {
       nodes: result.data.nodeAiDemos.nodes,
