@@ -86,7 +86,11 @@ export default {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
-  			}
+  			},
+			li_btn_color:'#1c88b3',
+			da_btn_color:'#239dcf',
+			da_nav_color:'#45b3e0',
+			btn_hover_color:'#72c5e6',
   		}
   	}
   },
