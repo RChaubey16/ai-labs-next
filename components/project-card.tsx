@@ -1,21 +1,25 @@
+import Link from 'next/link'
+
 import { ArrowUpRight } from 'lucide-react'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 
 interface ProjectCardProps {
+  id: string
   title: string
   description: string
   tags: { id: string; name: string }[]
-  demoUrl: string
+  youtubeUrl: string
   path: string
 }
 
 export default function ProjectCard({
+  id,
   title,
   description,
   tags,
-  demoUrl,
+  youtubeUrl,
   path,
 }: ProjectCardProps) {
   return (
@@ -35,7 +39,6 @@ export default function ProjectCard({
           className="text-qed-gray"
           dangerouslySetInnerHTML={{ __html: description }}
         />
-
         <div className="mt-4 flex flex-wrap gap-2">
           {tags.map((tag) => (
             <Badge
@@ -54,9 +57,9 @@ export default function ProjectCard({
           asChild
           className="border-qed-red text-qed-red hover:bg-qed-red/10 w-full"
         >
-          <a href={path} target="_blank" rel="noopener noreferrer">
+          <Link href={`/node/${id}`}>
             View Demo <ArrowUpRight className="ml-2 h-4 w-4" />
-          </a>
+          </Link>
         </Button>
       </CardFooter>
     </Card>

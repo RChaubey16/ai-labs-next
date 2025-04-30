@@ -1,19 +1,12 @@
 import { gql } from '@urql/core'
 import { getClient } from '@/utils/drupal/client'
+import { Demo } from '@/components/demos/demos'
 
 interface PaginationParams {
   first?: number
   after?: string | null
   before?: string | null
   last?: number
-}
-
-interface Demo {
-  id: string
-  title: string
-  description: { value: string }
-  technologies: { id: string; name: string; path: string }[]
-  path: string
 }
 
 interface PageInfo {
@@ -27,6 +20,37 @@ interface FetchDemosResult {
   nodes: Demo[]
   pageInfo: PageInfo
 }
+
+const MY_QUERY = gql`
+  query MyQuery($first: Int, $after: Cursor, $before: Cursor, $last: Int) {
+    nodeAiDemos(first: $first, after: $after, before: $before, last: $last) {
+      nodes {
+        id
+        technologies {
+          ... on TermTags {
+            id
+            name
+            path
+          }
+        }
+        path
+        title
+        description {
+          value
+        }
+        youtubeUrl {
+          url
+        }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+    }
+  }
+`
 
 export const fetchDemos = async (
   paginationParams: PaginationParams = { first: 10 }
@@ -51,45 +75,13 @@ export const fetchDemos = async (
 
     console.log('GraphQL Variables:', variables)
 
-    const MY_QUERY = gql`
-      query MyQuery($first: Int, $after: Cursor, $before: Cursor, $last: Int) {
-        nodeAiDemos(
-          first: $first
-          after: $after
-          before: $before
-          last: $last
-        ) {
-          nodes {
-            id
-            technologies {
-              ... on TermTags {
-                id
-                name
-                path
-              }
-            }
-            path
-            title
-            description {
-              value
-            }
-          }
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-        }
-      }
-    `
-
     const result = await client.query(MY_QUERY, variables).toPromise()
 
     if (!result.data) {
       console.error('GraphQL response error:', result.error)
       throw new Error(result.error?.message || 'GraphQL query failed')
     }
+    // console.log(result.data.nodeAiDemos.nodes)
 
     return {
       nodes: result.data.nodeAiDemos.nodes,

@@ -1,5 +1,4 @@
 // app/page.tsx
-export const revalidate = 60
 import SignInCTA from '@/components/sign-in-cta'
 import Header from '@/components/header/header'
 import Footer from '@/components/footer/footer'
@@ -8,6 +7,7 @@ import Demos from '@/components/demos/demos'
 import Capabilities from '@/components/capabilities/capabilities'
 import About from '@/components/about/about'
 import Contact from '@/components/contact/contact'
+import { REVALIDATE_TIME } from '@/constants'
 
 export default function Home() {
   return (
@@ -15,7 +15,7 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <Hero />
-        <section id="sign-in" className=" py-12 md:py-16">
+        <section id="sign-in" className="py-12 md:py-16">
           <div className="container px-4 md:px-6">
             <SignInCTA />
           </div>
@@ -29,3 +29,5 @@ export default function Home() {
     </div>
   )
 }
+
+export const revalidate = REVALIDATE_TIME
