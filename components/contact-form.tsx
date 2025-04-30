@@ -104,7 +104,7 @@ export default function ContactForm() {
 
         <Button
           type="submit"
-          className="w-full bg-li_btn_color dark:bg-da_btn_color hover:bg-btn_hover_color dark:hover:bg-btn_hover_color text-white dark:text-white border-none transition-all duration-300"
+          className="w-full bg-li_btn_color dark:bg-da_btn_color hover:bg-li_btn_hover_color dark:hover:bg-da_btn_hover_color text-white dark:text-white border-none transition-all duration-300"
           disabled={isSubmitting}
         >
           {isSubmitting ? "Sending..." : "Send Message"}

@@ -198,7 +198,7 @@ export default function SignInCTA() {
                       />
                       <Button
                         type="submit"
-                        className="w-full border-none bg-li_btn_color text-white transition-all duration-300 hover:bg-btn_hover_color dark:bg-da_btn_color dark:text-white dark:hover:bg-btn_hover_color"
+                        className="w-full border-none bg-li_btn_color text-white transition-all duration-300 hover:bg-li_btn_hover_color dark:bg-da_btn_color dark:text-white dark:hover:bg-da_btn_hover_color"
                         disabled={isSubmitting}
                       >
                         {isSubmitting ? 'Signing in...' : 'Sign In'}
@@ -272,7 +272,7 @@ export default function SignInCTA() {
                       />
                       <Button
                         type="submit"
-                        className="w-full border-none bg-li_btn_color text-white transition-all duration-300 hover:bg-btn_hover_color dark:bg-da_btn_color dark:text-white dark:hover:bg-btn_hover_color"
+                        className="w-full border-none bg-li_btn_color text-white transition-all duration-300 hover:bg-li_btn_hover_color dark:bg-da_btn_color dark:text-white dark:hover:bg-da_btn_hover_color"
                         disabled={isSubmitting}
                       >
                         {isSubmitting

@@ -10,7 +10,7 @@ export default function About(){
           <DecorativeBackground variant="aboutus" /> 
           <div className="container px-4 md:px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-              <div>
+              <div className="hidden lg:block">
                 <img
                   src="/placeholder.svg?height=300&width=600"
                   alt="QED42 AI Labs team working on AI solutions"
@@ -32,7 +32,7 @@ export default function About(){
                   to test our applications with a limit of 50 requests per day.
                 </p>
                 <div className="pt-4">
-                  <Button asChild className="bg-li_btn_color dark:bg-da_btn_color hover:bg-btn_hover_color dark:hover:bg-btn_hover_color text-white dark:text-white border-none transition-all duration-300">
+                  <Button asChild className="bg-li_btn_color dark:bg-da_btn_color hover:bg-li_btn_hover_color dark:hover:bg-da_btn_hover_color text-white dark:text-white border-none transition-all duration-300">
                     <Link href="#contact">
                       Contact Us <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>

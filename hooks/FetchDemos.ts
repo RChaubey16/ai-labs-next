@@ -23,7 +23,7 @@ interface FetchDemosResult {
 
 const MY_QUERY = gql`
   query MyQuery($first: Int, $after: Cursor, $before: Cursor, $last: Int) {
-    nodeAiDemos(first: $first, after: $after, before: $before, last: $last) {
+    nodeAiDemos(first: $first, after: $after, before: $before, last: $last, sortKey: CREATED_AT, reverse: true) {
       nodes {
         id
         technologies {

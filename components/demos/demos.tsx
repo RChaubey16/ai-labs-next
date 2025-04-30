@@ -1,6 +1,9 @@
 import { fetchDemos } from '@/hooks/FetchDemos'
 import ProjectCard from '@/components/project-card'
 import DecorativeBackground from '../decorative/DecorativeBackground'
+import Link from 'next/link'
+import { Button } from '../ui/button'
+import { ArrowRight } from 'lucide-react'
 
 export type Demo = {
   id: string
@@ -26,7 +29,7 @@ export default async function Demos() {
   }
 
   return (
-    <section id="demos" className="relative overflow-hidden py-16 md:py-24">
+    <section id="demos" className="relative overflow-hidden pt-16 md:pt-24">
       <DecorativeBackground variant="demos" />
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-start justify-start space-y-4 text-left">
@@ -52,8 +55,18 @@ export default async function Demos() {
               youtubeUrl={demo.youtubeUrl?.url || ''}
               path={demo.path}
             />
-          ))} 
+          ))}
         </div>
+      </div>
+      <div className="mt-16 text-center">
+        <Button
+          asChild
+          className="bg-li_btn_color dark:bg-da_btn_color hover:bg-li_btn_hover_color dark:hover:bg-da_btn_hover_color border-none text-white transition-all duration-300 dark:text-white"
+        >
+          <Link href="/demos/1">
+            View All Demos <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
+        </Button>
       </div>
     </section>
   )
