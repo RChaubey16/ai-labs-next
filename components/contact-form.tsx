@@ -5,7 +5,14 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -18,6 +25,8 @@ const formSchema = z.object({
   message: z.string().min(10, { message: "Message must be at least 10 characters." }),
   requestIncreasedLimit: z.boolean().default(false),
 })
+
+type FormFieldName = keyof z.infer<typeof formSchema>
 
 export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -45,38 +54,46 @@ export default function ContactForm() {
     }, 1500)
   }
 
+  const fields: FormFieldName[] = ["name", "email", "company", "message"]
+
+  const placeholderMap: Record<FormFieldName, string> = {
+    name: "Your name",
+    email: "your.email@example.com",
+    company: "Your company (optional)",
+    message: "Tell us about your project or inquiry...",
+    requestIncreasedLimit: "",
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        {["name", "email", "company", "message"].map((fieldName, index) => {
+        {fields.map((fieldName, index) => {
           const isTextarea = fieldName === "message"
-          const placeholderMap = {
-            name: "Your name",
-            email: "your.email@example.com",
-            company: "Your company (optional)",
-            message: "Tell us about your project or inquiry...",
-          }
 
           return (
             <FormField
               key={index}
               control={form.control}
-              name={fieldName as any}
+              name={fieldName}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="dark:text-white">{fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}</FormLabel>
+                  <FormLabel className="dark:text-white">
+                    {fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}
+                  </FormLabel>
                   <FormControl>
                     {isTextarea ? (
                       <Textarea
                         {...field}
-                        placeholder={placeholderMap[fieldName as keyof typeof placeholderMap]}
-                        className="min-h-[120px] border-gray-300 focus-visible:ring-[#239dcf]"
+                        value={String(field.value)}
+                        placeholder={placeholderMap[fieldName]}
+                        className="min-h-[120px] border-gray-300 focus-visible:ring-[#239dcf] dark:text-white"
                       />
                     ) : (
                       <Input
                         {...field}
-                        placeholder={placeholderMap[fieldName as keyof typeof placeholderMap]}
-                        className="border-gray-300 focus-visible:ring-[#239dcf]"
+                        value={String(field.value)}
+                        placeholder={placeholderMap[fieldName]}
+                        className="border-gray-300 focus-visible:ring-[#239dcf] dark:text-white"
                       />
                     )}
                   </FormControl>
@@ -96,7 +113,9 @@ export default function ContactForm() {
                 <Checkbox checked={field.value} onCheckedChange={field.onChange} />
               </FormControl>
               <div className="space-y-1 leading-none">
-                <FormLabel className="text-black dark:text-white">I would like to request increased API request limits</FormLabel>
+                <FormLabel className="text-black dark:text-white">
+                  I would like to request increased API request limits
+                </FormLabel>
               </div>
             </FormItem>
           )}

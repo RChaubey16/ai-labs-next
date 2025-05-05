@@ -1,5 +1,4 @@
 'use client'
-import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import ProjectCard from '@/components/project-card'
 import { Demo } from '@/components/demos/demos'
@@ -12,10 +11,6 @@ type Props = {
 }
 export default function DemoGallery({
   demos,
-  page,
-  totalPages,
-  hasPreviousPage,
-  hasNextPage,
 }: Props) {
   return (
     <div>

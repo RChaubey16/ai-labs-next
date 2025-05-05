@@ -1,12 +1,10 @@
-import Header from '@/components/header/header'
-import Footer from '@/components/footer/footer'
 import { YoutubeEmbed } from '@/components/youtube-embed/youtube-embed'
 import { fetchDemos } from '@/hooks/FetchDemos'
 import { fetchDemoById } from '@/hooks/FetchDemoById'
 import { notFound } from 'next/navigation'
 import { REVALIDATE_TIME } from '@/constants'
 export async function generateStaticParams() {
-  let allDemos: { id: string }[] = []
+  const allDemos: { id: string }[] = []
   let hasNextPage = true
   let endCursor: string | null = null
   while (hasNextPage) {
@@ -48,16 +46,10 @@ export default async function DemoDetail({
             />
             <div className="mt-12 flex flex-col gap-4 sm:flex-row justify-center w-full">
               <a
-                href="/test"
+                href="/demos/1"
                 className="inline-flex items-center justify-center rounded-md bg-gray-100 px-6 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200"
               >
                 Back to Demos
-              </a>
-              <a
-                href="#"
-                className="bg-qed-blue inline-flex items-center justify-center rounded-md px-6 py-2 text-sm font-medium text-white hover:bg-blue-700"
-              >
-                Try this Demo
               </a>
             </div>
           </div>

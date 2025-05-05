@@ -12,6 +12,5 @@ export const getToken = async ({ uri, clientId, clientSecret }: TokenArgs) => {
     clientSecret,
   })
 
-  console.log("Client", client)
   return `${client.token_type} ${client.access_token}`
 }

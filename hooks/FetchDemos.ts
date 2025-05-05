@@ -73,7 +73,7 @@ export const fetchDemos = async (
     if (paginationParams.last !== undefined)
       variables.last = paginationParams.last
 
-    console.log('GraphQL Variables:', variables)
+    // console.log('GraphQL Variables:', variables)
 
     const result = await client.query(MY_QUERY, variables).toPromise()
 
