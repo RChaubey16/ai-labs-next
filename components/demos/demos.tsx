@@ -16,7 +16,6 @@ export type Demo = {
 
 export default async function Demos() {
   const { nodes: demos } = await fetchDemos({ first: 6 })
-  console.log('Demos:', demos)
 
   if (!demos || demos.length === 0) {
     return (

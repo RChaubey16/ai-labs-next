@@ -20,7 +20,7 @@ export default function Contact() {
               CONTACT US
             </span>
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-1">
-              Let's Discuss Your <span className="text-[#239dcf]">AI Project</span>
+              Let&apos;s Discuss Your <span className="text-[#239dcf]">AI Project</span>
             </h2>
             <p className="max-w-[500px] dark:text-white/80 md:text-xl mb-6">
               Want to increase your request limit or discuss how our AI solutions can help your organization? Our

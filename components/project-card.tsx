@@ -4,6 +4,7 @@ import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import Image from "next/image"
 interface ProjectCardProps {
   id: string
   title: string
@@ -26,7 +27,6 @@ export default function ProjectCard({
   description,
   tags,
   youtubeUrl,
-  path,
 }: ProjectCardProps) {
   const truncateDescription = (text: string, maxLength: number) =>
     text.length > maxLength ? text.substring(0, maxLength).trim() + '...' : text
@@ -39,11 +39,16 @@ export default function ProjectCard({
     >
       {/* Thumbnail */}
       <div className={cn('overflow-hidden', 'aspect-video max-h-48 w-full')}>
-        <img
-          src={getYouTubeThumbnail(youtubeUrl)}
-          alt={title}
-          className="h-full w-full object-cover"
-        />
+        <div className={cn('overflow-hidden', 'aspect-video max-h-48 w-full')}>
+          <Image
+            src={getYouTubeThumbnail(youtubeUrl)}
+            alt={title}
+            width={1280}
+            height={720}
+            className="h-full w-full object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+        </div>
       </div>
       {/* Text Content */}
       <div className={cn('flex flex-col', 'flex-1')}>
@@ -59,7 +64,7 @@ export default function ProjectCard({
             {truncateDescription(description.replace(/<[^>]*>?/gm, ''), 100)}
           </p>
           <div className={cn('flex flex-wrap gap-2', 'mt-3')}>
-            {tags.slice(0, 3).map((tag) => (
+            {tags?.slice(0, 3).map((tag) => (
               <Badge
                 key={tag.id}
                 variant="secondary"
@@ -68,7 +73,7 @@ export default function ProjectCard({
                 {tag.name}
               </Badge>
             ))}
-            {tags.length > 3 && (
+            {tags!=null && tags.length > 3 && (
               <Badge variant="outline" className="text-xs">
                 +{tags.length - 3}
               </Badge>
