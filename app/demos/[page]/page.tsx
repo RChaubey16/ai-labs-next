@@ -45,16 +45,16 @@ export default async function DemosPage({ params }: PageProps) {
   const demos = allDemos.slice(startIndex, endIndex)
   const hasPreviousPage = page > 1
   const hasNextPage = page < totalPages
+
   return (
-    <section className="px-4 py-16 sm:px-6 md:py-8 lg:px-8">
+    <section className="px-4 py-16 sm:px-6 md:py-8 lg:px-8 mx-auto max-w-full sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-6xl transition-all duration-300 ease-in-out">
       <div className="mb-12 px-2 text-center">
         <div className="relative inline-block w-full max-w-3xl">
-          <div className="absolute inset-0 z-[-1] rounded-2xl  from-sky-100 to-blue-200 opacity-40 blur-lg dark:from-sky-900 dark:to-blue-800" />
+          <div className="absolute inset-0 z-[-1] rounded-2xl from-sky-100 to-blue-200 opacity-40 blur-lg dark:from-sky-900 dark:to-blue-800" />
           <div className="">
             <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
               Explore Project Demos
             </h1>
-
           </div>
         </div>
       </div>
@@ -76,4 +76,5 @@ export default async function DemosPage({ params }: PageProps) {
     </section>
   )
 }
+
 export const revalidate = REVALIDATE_TIME
