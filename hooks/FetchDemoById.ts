@@ -1,6 +1,49 @@
 import { gql } from '@urql/core'
 import { getClient } from '@/utils/drupal/client'
 
+const METADATA_QUERY = gql`
+  fragment MetaTagFields on MetaTagUnion {
+    ... on MetaTagLink {
+      __typename
+      tag
+      attributes {
+        media
+        href
+        hreflang
+        rel
+        sizes
+        type
+      }
+    }
+    ... on MetaTagValue {
+      __typename
+      tag
+      attributes {
+        content
+        name
+      }
+    }
+    ... on MetaTagProperty {
+      __typename
+      tag
+      attributes {
+        content
+        property
+      }
+    }
+    ... on MetaTagScript {
+      __typename
+      tag
+      content
+      attributes {
+        integrity
+        src
+        type
+      }
+    }
+  }
+`
+
 const NODE_BY_ID_QUERY = gql`
   query GetNodeById($id: ID!) {
     nodeAiDemo(id: $id) {
@@ -19,8 +62,13 @@ const NODE_BY_ID_QUERY = gql`
       description {
         processed
       }
+      metatag {
+        ...MetaTagFields
+      }
     }
   }
+
+  ${METADATA_QUERY}
 `
 
 export const fetchDemoById = async (id: string) => {
