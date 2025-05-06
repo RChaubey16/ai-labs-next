@@ -1,50 +1,57 @@
 import { YoutubeEmbed } from '@/components/youtube-embed/youtube-embed'
-import { fetchDemos } from '@/hooks/FetchDemos'
 import { fetchDemoById } from '@/hooks/FetchDemoById'
 import { notFound } from 'next/navigation'
 import { REVALIDATE_TIME } from '@/constants'
+import fetchAllDemos from '@/hooks/FetchAllDemos'
+
 export async function generateStaticParams() {
-  const allDemos: { id: string }[] = []
-  let hasNextPage = true
-  let endCursor: string | null = null
-  while (hasNextPage) {
-    const { nodes, pageInfo } = await fetchDemos({
-      first: 100,
-      after: endCursor,
-    })
-    allDemos.push(...nodes.map((node) => ({ id: node.id })))
-    hasNextPage = pageInfo.hasNextPage
-    endCursor = pageInfo.endCursor
-  }
-  return allDemos
+  const allDemos = await fetchAllDemos()
+
+  return allDemos.map((demo) => ({
+    slug: demo.path.split('/').pop()!,
+  }))
 }
+
 export default async function DemoDetail({
   params,
 }: {
-  params: { id: string }
+  params: { slug: string }
 }) {
-  const data = await fetchDemoById(params.id)
-  if (!data) notFound()
+  const allDemos = await fetchAllDemos()
+  const match = allDemos.find(
+    (demo) => demo.path.split('/').pop() === params.slug
+  )
+  if (!match) {
+    console.error(`No data found for slug: ${params.slug}`)
+    notFound()
+  }
+
+  const data = await fetchDemoById(match.id)
+  if (!data) {
+    console.error(`No data found for ID: ${match.id}`)
+    notFound()
+  }
+
   return (
     <div className="flex min-h-screen flex-col">
       <main className="flex-1">
         <section className="py-12 md:py-16">
-          <div className="container mx-auto max-w-4xl px-4 md:px-6 flex flex-col items-center">
-            <h1 className="mb-8 text-3xl font-bold tracking-tight md:text-5xl text-center">
+          <div className="container mx-auto flex max-w-4xl flex-col items-center px-4 md:px-6">
+            <h1 className="mb-8 text-center text-3xl font-bold tracking-tight md:text-5xl">
               {data.title}
             </h1>
             {data.youtubeUrl?.url && (
-              <div className="mb-8 aspect-video w-full overflow-hidden rounded-lg bg-gray-100 max-w-3xl">
+              <div className="mb-8 aspect-video w-full max-w-3xl overflow-hidden rounded-lg bg-gray-100">
                 <YoutubeEmbed videoId={extractYouTubeId(data.youtubeUrl.url)} />
               </div>
             )}
             <div
-              className="dark:text-white w-full max-w-3xl"
+              className="w-full max-w-3xl dark:text-white"
               dangerouslySetInnerHTML={{
                 __html: data.description?.processed ?? '',
               }}
             />
-            <div className="mt-12 flex flex-col gap-4 sm:flex-row justify-center w-full">
+            <div className="mt-12 flex w-full flex-col justify-center gap-4 sm:flex-row">
               <a
                 href="/demos/1"
                 className="inline-flex items-center justify-center rounded-md bg-gray-100 px-6 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200"
@@ -58,6 +65,7 @@ export default async function DemoDetail({
     </div>
   )
 }
+
 function extractYouTubeId(url: string): string {
   try {
     const u = new URL(url)
@@ -66,4 +74,5 @@ function extractYouTubeId(url: string): string {
     return ''
   }
 }
+
 export const revalidate = REVALIDATE_TIME

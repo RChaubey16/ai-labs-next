@@ -1,28 +1,14 @@
-import { fetchDemos } from '@/hooks/FetchDemos'
 import Pagination from '@/components/pagination/pagination'
 import { notFound } from 'next/navigation'
-import { Demo } from '@/components/demos/demos'
 import DemoGallery from '@/components/demo-gallery/demo-gallery'
 import { REVALIDATE_TIME } from '@/constants'
+import fetchAllDemos from '@/hooks/FetchAllDemos'
+
 const ITEMS_PER_PAGE = 6
 type PageProps = {
   params: { page: string }
 }
-async function fetchAllDemos(): Promise<Demo[]> {
-  let allDemos: Demo[] = []
-  let hasNextPage = true
-  let endCursor: string | null = null
-  while (hasNextPage) {
-    const { nodes, pageInfo } = await fetchDemos({
-      first: 100,
-      after: endCursor,
-    })
-    allDemos = [...allDemos, ...nodes]
-    hasNextPage = pageInfo.hasNextPage
-    endCursor = pageInfo.endCursor
-  }
-  return allDemos
-}
+
 export async function generateStaticParams() {
   const allDemos = await fetchAllDemos()
   const totalPages = Math.ceil(allDemos.length / ITEMS_PER_PAGE)
@@ -30,6 +16,7 @@ export async function generateStaticParams() {
     page: (i + 1).toString(),
   }))
 }
+
 export default async function DemosPage({ params }: PageProps) {
   const page = parseInt(params.page, 10)
   if (isNaN(page) || page < 1) {
