@@ -41,10 +41,7 @@ export async function generateMetadata({
     ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
     : undefined
 
-    const metaDescription = truncateDescription(
-      stripHtmlTags(data?.description?.value) || '',
-      280
-    )
+    const metaDescription = stripHtmlTags(data?.description?.value)
 
   // Construct dynamic metadata
   interface MetaTagAttributes {
