@@ -61,7 +61,6 @@ const NODE_BY_ID_QUERY = gql`
       title
       description {
         processed
-        value
       }
       metatag {
         ...MetaTagFields

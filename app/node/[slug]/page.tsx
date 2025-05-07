@@ -94,7 +94,7 @@ export async function generateMetadata({
     ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
     : undefined
 
-  const metaDescription = stripHtmlTags(data?.description?.value)
+  const metaDescription = stripHtmlTags(data?.description?.processed)
 
   return {
     title: data.title,
