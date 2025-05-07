@@ -5,6 +5,50 @@ import { REVALIDATE_TIME } from '@/constants'
 import fetchAllDemos from '@/hooks/FetchAllDemos'
 import { stripHtmlTags } from '@/lib/utils'
 
+// Type definitions
+interface MetaTagAttributes {
+  [key: string]: string;
+}
+
+interface MetaTagValue {
+  __typename: 'MetaTagValue';
+  attributes: MetaTagAttributes;
+}
+
+interface MetaTagProperty {
+  __typename: 'MetaTagProperty';
+  attributes: MetaTagAttributes;
+}
+
+interface MetaTagLink {
+  __typename: 'MetaTagLink';
+  attributes: MetaTagAttributes;
+}
+
+type MetaTag = MetaTagValue | MetaTagProperty | MetaTagLink;
+
+interface OpenGraphMetadata {
+  title: string;
+  description: string;
+  url: string;
+  images: Array<{ url: string }>;
+}
+
+interface TwitterMetadata {
+  title: string;
+  description: string;
+  images: string[];
+  card: 'summary_large_image' | 'summary';
+}
+
+interface PageMetadata {
+  title: string;
+  description: string;
+  openGraph: OpenGraphMetadata;
+  twitter: TwitterMetadata;
+  metaTags: (JSX.Element | null)[];
+}
+
 export async function generateStaticParams() {
   const allDemos = await fetchAllDemos()
 
@@ -23,16 +67,13 @@ export async function generateMetadata({
     (demo) => demo.path.split('/').pop() === params.slug
   )
   if (!demo) {
-    console.error(`No demo found for slug: ${params.slug}`)
     return {}
   }
   const data = await fetchDemoById(demo.id)
   if (!data) {
-    console.error(`No data found for ID: ${demo.id}`)
     notFound()
   }
   const metatags = data.metatag || []
-  console.log('Metatags:', metatags)
   const youtubeId = data.youtubeUrl?.url
     ? extractYouTubeId(data.youtubeUrl.url)
     : null
@@ -41,79 +82,35 @@ export async function generateMetadata({
     ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
     : undefined
 
-    const metaDescription = stripHtmlTags(data?.description?.value)
+  const metaDescription = stripHtmlTags(data?.description?.value)
 
-  // Construct dynamic metadata
-  interface MetaTagAttributes {
-    [key: string]: string;
-  }
-
-  interface MetaTagValue {
-    __typename: 'MetaTagValue';
-    attributes: MetaTagAttributes;
-  }
-
-  interface MetaTagProperty {
-    __typename: 'MetaTagProperty';
-    attributes: MetaTagAttributes;
-  }
-
-  interface MetaTagLink {
-    __typename: 'MetaTagLink';
-    attributes: MetaTagAttributes;
-  }
-
-  type MetaTag = MetaTagValue | MetaTagProperty | MetaTagLink;
-
-  interface OpenGraphMetadata {
-    title: string;
-    description: string;
-    url: string;
-    images: Array<{ url: string }>;
-  }
-
-  interface TwitterMetadata {
-    title: string;
-    description: string;
-    images: string[];
-    card: 'summary_large_image' | 'summary';
-  }
-
-  interface PageMetadata {
-    title: string;
-    description: string;
-    openGraph: OpenGraphMetadata;
-    twitter: TwitterMetadata;
-    metaTags: (JSX.Element | null)[];
-  }
-
-    return {
+  return {
+    title: data.title,
+    description: metaDescription,
+    openGraph: {
       title: data.title,
       description: metaDescription,
-      openGraph: {
-        title: data.title,
-        description: metaDescription,
-        url: data.path,
-        images: thumbnailUrl ? [{ url: thumbnailUrl }] : [],
-      },
-      twitter: {
-        title: data.title,
-        description: metaDescription,
-        images: thumbnailUrl ? [thumbnailUrl] : [],
-        card: thumbnailUrl ? 'summary_large_image' : 'summary',
-      },
-      metaTags: metatags.map((tag: MetaTag, index: number) => {
-        switch (tag.__typename) {
-          case 'MetaTagValue':
-          case 'MetaTagProperty':
-            return <meta key={index} {...tag.attributes} />
-          case 'MetaTagLink':
-            return <link key={index} {...tag.attributes} />
-          default:
-            return null
-        }
-      }),
-    } satisfies PageMetadata
+      url: data.path,
+      images: thumbnailUrl ? [{ url: thumbnailUrl }] : [],
+    },
+    twitter: {
+      title: data.title,
+      description: metaDescription,
+      images: thumbnailUrl ? [thumbnailUrl] : [],
+      card: thumbnailUrl ? 'summary_large_image' : 'summary',
+    },
+    metaTags: metatags.map((tag: MetaTag, index: number) => {
+      switch (tag.__typename) {
+        case 'MetaTagValue':
+        case 'MetaTagProperty':
+          return <meta key={index} {...tag.attributes} />
+        case 'MetaTagLink':
+          return <link key={index} {...tag.attributes} />
+        default:
+          return null
+      }
+    }),
+  } satisfies PageMetadata
 }
 
 export default async function DemoDetail({
@@ -126,13 +123,11 @@ export default async function DemoDetail({
     (demo) => demo.path.split('/').pop() === params.slug
   )
   if (!match) {
-    console.error(`No data found for slug: ${params.slug}`)
     notFound()
   }
 
   const data = await fetchDemoById(match.id)
   if (!data) {
-    console.error(`No data found for ID: ${match.id}`)
     notFound()
   }
 
