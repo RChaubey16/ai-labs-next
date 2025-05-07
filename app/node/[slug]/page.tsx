@@ -40,7 +40,7 @@ export async function generateMetadata({
     ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
     : undefined
   const metaDescription = truncateDescription(
-    stripHtmlTags(data.description?.value) || '',
+    stripHtmlTags(data?.description?.value) || '',
     280
   )
 
@@ -93,7 +93,7 @@ export async function generateMetadata({
     description: metaDescription,
     openGraph: {
       title: data.title,
-      description: data.description?.value || '',
+      description: metaDescription,
       url: data.path,
       images: thumbnailUrl ? [{ url: thumbnailUrl }] : [],
     },
@@ -153,7 +153,7 @@ export default async function DemoDetail({
             <div
               className="w-full max-w-3xl dark:text-white"
               dangerouslySetInnerHTML={{
-                __html: data.description?.processed ?? '',
+                __html: data?.description?.processed ?? '',
               }}
             />
             <div className="mt-12 flex w-full flex-col justify-center gap-4 sm:flex-row">
