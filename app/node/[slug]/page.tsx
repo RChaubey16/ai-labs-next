@@ -87,16 +87,16 @@ export async function generateMetadata({
 
     return {
       title: data.title,
-      description: stripHtmlTags(data.description?.processed || ''),
+      description: stripHtmlTags(data.description?.value || ''),
       openGraph: {
         title: data.title,
-        description: stripHtmlTags(data.description?.processed || ''),
+        description: stripHtmlTags(data.description?.value || ''),
         url: data.path,
         images: thumbnailUrl ? [{ url: thumbnailUrl }] : [],
       },
       twitter: {
         title: data.title,
-        description: stripHtmlTags(data.description?.processed || ''),
+        description: stripHtmlTags(data.description?.value || ''),
         images: thumbnailUrl ? [thumbnailUrl] : [],
         card: thumbnailUrl ? 'summary_large_image' : 'summary',
       },
