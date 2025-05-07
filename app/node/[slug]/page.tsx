@@ -3,7 +3,7 @@ import { fetchDemoById } from '@/hooks/FetchDemoById'
 import { notFound } from 'next/navigation'
 import { REVALIDATE_TIME } from '@/constants'
 import fetchAllDemos from '@/hooks/FetchAllDemos'
-import { stripHtmlTags, truncateDescription } from '@/lib/utils'
+import { stripHtmlTags } from '@/lib/utils'
 
 export async function generateStaticParams() {
   const allDemos = await fetchAllDemos()
