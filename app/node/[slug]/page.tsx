@@ -46,46 +46,46 @@ export async function generateMetadata({
 
   // Construct dynamic metadata
   interface MetaTagAttributes {
-    [key: string]: string
+    [key: string]: string;
   }
 
   interface MetaTagValue {
-    __typename: 'MetaTagValue'
-    attributes: MetaTagAttributes
+    __typename: 'MetaTagValue';
+    attributes: MetaTagAttributes;
   }
 
   interface MetaTagProperty {
-    __typename: 'MetaTagProperty'
-    attributes: MetaTagAttributes
+    __typename: 'MetaTagProperty';
+    attributes: MetaTagAttributes;
   }
 
   interface MetaTagLink {
-    __typename: 'MetaTagLink'
-    attributes: MetaTagAttributes
+    __typename: 'MetaTagLink';
+    attributes: MetaTagAttributes;
   }
 
-  type MetaTag = MetaTagValue | MetaTagProperty | MetaTagLink
+  type MetaTag = MetaTagValue | MetaTagProperty | MetaTagLink;
 
   interface OpenGraphMetadata {
-    title: string
-    description: string
-    url: string
-    images: Array<{ url: string }>
+    title: string;
+    description: string;
+    url: string;
+    images: Array<{ url: string }>;
   }
 
   interface TwitterMetadata {
-    title: string
-    description: string
-    images: string[]
-    card: 'summary_large_image' | 'summary'
+    title: string;
+    description: string;
+    images: string[];
+    card: 'summary_large_image' | 'summary';
   }
 
   interface PageMetadata {
-    title: string
-    description: string
-    openGraph: OpenGraphMetadata
-    twitter: TwitterMetadata
-    metaTags: (JSX.Element | null)[]
+    title: string;
+    description: string;
+    openGraph: OpenGraphMetadata;
+    twitter: TwitterMetadata;
+    metaTags: (JSX.Element | null)[];
   }
 
   return {
