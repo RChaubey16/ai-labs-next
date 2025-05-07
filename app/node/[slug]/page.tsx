@@ -32,6 +32,7 @@ export async function generateMetadata({
     notFound()
   }
   const metatags = data.metatag || []
+  console.log('Metatags:', metatags)
   const youtubeId = data.youtubeUrl?.url
     ? extractYouTubeId(data.youtubeUrl.url)
     : null
@@ -39,10 +40,11 @@ export async function generateMetadata({
   const thumbnailUrl = youtubeId
     ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
     : undefined
-  const metaDescription = truncateDescription(
-    stripHtmlTags(data?.description?.value) || '',
-    280
-  )
+
+    const metaDescription = truncateDescription(
+      stripHtmlTags(data?.description?.value) || '',
+      280
+    )
 
   // Construct dynamic metadata
   interface MetaTagAttributes {
@@ -88,33 +90,33 @@ export async function generateMetadata({
     metaTags: (JSX.Element | null)[];
   }
 
-  return {
-    title: data.title,
-    description: metaDescription,
-    openGraph: {
+    return {
       title: data.title,
       description: metaDescription,
-      url: data.path,
-      images: thumbnailUrl ? [{ url: thumbnailUrl }] : [],
-    },
-    twitter: {
-      title: data.title,
-      description: metaDescription,
-      images: thumbnailUrl ? [thumbnailUrl] : [],
-      card: thumbnailUrl ? 'summary_large_image' : 'summary',
-    },
-    metaTags: metatags.map((tag: MetaTag, index: number) => {
-      switch (tag.__typename) {
-        case 'MetaTagValue':
-        case 'MetaTagProperty':
-          return <meta key={index} {...tag.attributes} />
-        case 'MetaTagLink':
-          return <link key={index} {...tag.attributes} />
-        default:
-          return null
-      }
-    }),
-  } satisfies PageMetadata
+      openGraph: {
+        title: data.title,
+        description: metaDescription,
+        url: data.path,
+        images: thumbnailUrl ? [{ url: thumbnailUrl }] : [],
+      },
+      twitter: {
+        title: data.title,
+        description: metaDescription,
+        images: thumbnailUrl ? [thumbnailUrl] : [],
+        card: thumbnailUrl ? 'summary_large_image' : 'summary',
+      },
+      metaTags: metatags.map((tag: MetaTag, index: number) => {
+        switch (tag.__typename) {
+          case 'MetaTagValue':
+          case 'MetaTagProperty':
+            return <meta key={index} {...tag.attributes} />
+          case 'MetaTagLink':
+            return <link key={index} {...tag.attributes} />
+          default:
+            return null
+        }
+      }),
+    } satisfies PageMetadata
 }
 
 export default async function DemoDetail({
@@ -153,7 +155,7 @@ export default async function DemoDetail({
             <div
               className="w-full max-w-3xl dark:text-white"
               dangerouslySetInnerHTML={{
-                __html: data?.description?.processed ?? '',
+                __html: data.description?.processed ?? '',
               }}
             />
             <div className="mt-12 flex w-full flex-col justify-center gap-4 sm:flex-row">
