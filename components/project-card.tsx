@@ -22,11 +22,12 @@ const getYouTubeThumbnail = (url: string) => {
 };
 
 export default function ProjectCard({
-  id,
+  // id,
   title,
   description,
   tags,
   youtubeUrl,
+  path,
 }: ProjectCardProps) {
   const truncateDescription = (text: string, maxLength: number) =>
     text.length > maxLength ? text.substring(0, maxLength).trim() + '...' : text
@@ -90,7 +91,7 @@ export default function ProjectCard({
             )}
           >
             <Link
-              href={`/node/${id}`}
+              href={`${path}`}
               className="flex items-center justify-center"
             >
               View Demo <ArrowUpRight className="ml-1 h-3 w-3" />

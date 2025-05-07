@@ -1,5 +1,5 @@
 // app/page.tsx
-import SignInCTA from '@/components/sign-in-cta'
+// import SignInCTA from '@/components/sign-in-cta'
 import Hero from '@/components/hero/hero'
 import Demos from '@/components/demos/demos'
 import Capabilities from '@/components/capabilities/capabilities'
@@ -12,12 +12,12 @@ export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
       <main className="flex-1">
-        <ScrollReveal >
+        <ScrollReveal>
           <Hero />
         </ScrollReveal>
-        <ScrollReveal>
-        <SignInCTA />
-        </ScrollReveal>
+        {/* <ScrollReveal>
+          <SignInCTA />
+        </ScrollReveal> */}
         <ScrollReveal>
           <Demos />
         </ScrollReveal>
