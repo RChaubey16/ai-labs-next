@@ -3,6 +3,7 @@ import { fetchDemoById } from '@/hooks/FetchDemoById'
 import { notFound } from 'next/navigation'
 import { REVALIDATE_TIME } from '@/constants'
 import fetchAllDemos from '@/hooks/FetchAllDemos'
+import { stripHtmlTags } from '@/lib/helpers'
 
 export async function generateStaticParams() {
   const allDemos = await fetchAllDemos()
@@ -31,7 +32,7 @@ export async function generateMetadata({
     notFound()
   }
   const metatags = data.metatag || []
-  console.log('Metatags:', metatags)
+
   const youtubeId = data.youtubeUrl?.url
     ? extractYouTubeId(data.youtubeUrl.url)
     : null
@@ -86,16 +87,16 @@ export async function generateMetadata({
 
     return {
       title: data.title,
-      description: data.description?.value || '',
+      description: stripHtmlTags(data.description?.value || ''),
       openGraph: {
         title: data.title,
-        description: data.description?.value || '',
+        description: stripHtmlTags(data.description?.value || ''),
         url: data.path,
         images: thumbnailUrl ? [{ url: thumbnailUrl }] : [],
       },
       twitter: {
         title: data.title,
-        description: data.description?.value || '',
+        description: stripHtmlTags(data.description?.value || ''),
         images: thumbnailUrl ? [thumbnailUrl] : [],
         card: thumbnailUrl ? 'summary_large_image' : 'summary',
       },
