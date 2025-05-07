@@ -50,11 +50,23 @@ interface PageMetadata {
 }
 
 export async function generateStaticParams() {
-  const allDemos = await fetchAllDemos()
-
-  return allDemos.map((demo) => ({
-    slug: demo.path.split('/').pop()!,
-  }))
+  try {
+    const allDemos = await fetchAllDemos()
+    console.log(`Generating static params for ${allDemos.length} demos`)
+    
+    if (allDemos.length === 0) {
+      console.error('No demos available for static generation - this will cause 404 errors')
+    }
+    
+    return allDemos.map((demo) => {
+      const slug = demo.path.split('/').pop()!
+      console.log(`Generating static path for slug: ${slug}`)
+      return { slug }
+    })
+  } catch (error) {
+    console.error('Error in generateStaticParams:', error)
+    throw error // This will fail the build, which is better than silent failure
+  }
 }
 
 export async function generateMetadata({
@@ -118,51 +130,61 @@ export default async function DemoDetail({
 }: {
   params: { slug: string }
 }) {
-  const allDemos = await fetchAllDemos()
-  const match = allDemos.find(
-    (demo) => demo.path.split('/').pop() === params.slug
-  )
-  if (!match) {
-    notFound()
-  }
+  try {
+    const allDemos = await fetchAllDemos()
+    console.log(`Fetched ${allDemos.length} demos for slug: ${params.slug}`)
+    
+    const match = allDemos.find(
+      (demo) => demo.path.split('/').pop() === params.slug
+    )
+    
+    if (!match) {
+      console.error(`No demo found for slug: ${params.slug}`)
+      notFound()
+    }
 
-  const data = await fetchDemoById(match.id)
-  if (!data) {
-    notFound()
-  }
+    const data = await fetchDemoById(match.id)
+    if (!data) {
+      console.error(`fetchDemoById returned null for ID: ${match.id}`)
+      notFound()
+    }
 
-  return (
-    <div className="flex min-h-screen flex-col">
-      <main className="flex-1">
-        <section className="py-12 md:py-16">
-          <div className="container mx-auto flex max-w-4xl flex-col items-center px-4 md:px-6">
-            <h1 className="mb-8 text-center text-3xl font-bold tracking-tight md:text-5xl">
-              {data.title}
-            </h1>
-            {data.youtubeUrl?.url && (
-              <div className="mb-8 aspect-video w-full max-w-3xl overflow-hidden rounded-lg bg-gray-100">
-                <YoutubeEmbed videoId={extractYouTubeId(data.youtubeUrl.url)} />
+    return (
+      <div className="flex min-h-screen flex-col">
+        <main className="flex-1">
+          <section className="py-12 md:py-16">
+            <div className="container mx-auto flex max-w-4xl flex-col items-center px-4 md:px-6">
+              <h1 className="mb-8 text-center text-3xl font-bold tracking-tight md:text-5xl">
+                {data.title}
+              </h1>
+              {data.youtubeUrl?.url && (
+                <div className="mb-8 aspect-video w-full max-w-3xl overflow-hidden rounded-lg bg-gray-100">
+                  <YoutubeEmbed videoId={extractYouTubeId(data.youtubeUrl.url)} />
+                </div>
+              )}
+              <div
+                className="w-full max-w-3xl dark:text-white"
+                dangerouslySetInnerHTML={{
+                  __html: data.description?.processed ?? '',
+                }}
+              />
+              <div className="mt-12 flex w-full flex-col justify-center gap-4 sm:flex-row">
+                <a
+                  href="/demos/1"
+                  className="inline-flex items-center justify-center rounded-md bg-gray-100 px-6 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200"
+                >
+                  Back to Demos
+                </a>
               </div>
-            )}
-            <div
-              className="w-full max-w-3xl dark:text-white"
-              dangerouslySetInnerHTML={{
-                __html: data.description?.processed ?? '',
-              }}
-            />
-            <div className="mt-12 flex w-full flex-col justify-center gap-4 sm:flex-row">
-              <a
-                href="/demos/1"
-                className="inline-flex items-center justify-center rounded-md bg-gray-100 px-6 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200"
-              >
-                Back to Demos
-              </a>
             </div>
-          </div>
-        </section>
-      </main>
-    </div>
-  )
+          </section>
+        </main>
+      </div>
+    )
+  } catch (error) {
+    console.error('Error in DemoDetail:', error)
+    throw error
+  }
 }
 
 function extractYouTubeId(url: string): string {
