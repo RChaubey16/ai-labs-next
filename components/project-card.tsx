@@ -3,7 +3,7 @@ import { ArrowUpRight } from 'lucide-react'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
+import { cn, truncateDescription } from '@/lib/utils'
 import Image from "next/image"
 interface ProjectCardProps {
   id: string
@@ -29,8 +29,6 @@ export default function ProjectCard({
   youtubeUrl,
   path,
 }: ProjectCardProps) {
-  const truncateDescription = (text: string, maxLength: number) =>
-    text.length > maxLength ? text.substring(0, maxLength).trim() + '...' : text
   return (
     <Card
       className={cn(
